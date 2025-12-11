@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkNote - Your Personal Link Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <h2 id="authTitle">Welcome to LinkNote</h2>
+            <p class="auth-subtitle">Sign in to manage your personal links</p>
+            
+            <div id="authTabs" class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+            
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            
+            <form id="registerForm" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label for="registerUsername">Username</label>
+                    <input type="text" id="registerUsername" placeholder="Choose a username" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" placeholder="At least 6 characters" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+            
+            <div id="authMessage" class="auth-message"></div>
+        </div>
+    </div>
+
+    <div class="container" id="mainApp" style="display: none;">
+        <header>
+            <div class="header-content">
+                <div>
+                    <h1>📎 LinkNote</h1>
+                    <p class="subtitle">Store and organize your links effortlessly</p>
+                </div>
+                <div class="user-info">
+                    <span id="username">User</span>
+                    <button id="logoutBtn" class="btn-secondary">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="add-link-section">
+            <h2>Add New Link</h2>
+            <form id="linkForm">
+                <div class="form-group">
+                    <label for="linkUrl">URL *</label>
+                    <input type="url" id="linkUrl" placeholder="https://example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="linkTitle">Title *</label>
+                    <input type="text" id="linkTitle" placeholder="Enter link title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="linkDescription">Description</label>
+                    <textarea id="linkDescription" placeholder="Add a description for this link..." rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="linkCategory">Category</label>
+                    <input type="text" id="linkCategory" placeholder="e.g., Work, Personal, Learning">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <span id="submitText">Add Link</span>
+                </button>
+            </form>
+        </div>
+
+        <div class="search-section">
+            <div class="search-controls">
+                <input type="text" id="searchInput" placeholder="🔍 Search links by title, description, or URL...">
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                </select>
+                <select id="sortBy">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="title">Title (A-Z)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="stats">
+            <span id="linkCount">0 links saved</span>
+            <button id="exportBtn" class="btn-secondary">Export Links</button>
+        </div>
+
+        <div id="linksContainer" class="links-container">
+            <div class="empty-state">
+                <p>📭 No links saved yet. Start by adding your first link above!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

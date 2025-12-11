@@ -64,57 +64,63 @@
             </div>
         </header>
 
-        <div class="add-link-section">
-            <h2>Add New Link</h2>
-            <form id="linkForm">
-                <div class="form-group">
-                    <label for="linkUrl">URL *</label>
-                    <input type="url" id="linkUrl" placeholder="https://example.com" required>
+        <div class="main-content">
+            <div class="left-section">
+                <div class="search-section">
+                    <div class="search-controls">
+                        <input type="text" id="searchInput" placeholder="🔍 Search links...">
+                        <select id="categoryFilter">
+                            <option value="">All Categories</option>
+                        </select>
+                        <select id="sortBy">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="title">Title (A-Z)</option>
+                        </select>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="linkTitle">Title *</label>
-                    <input type="text" id="linkTitle" placeholder="Enter link title" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="linkDescription">Description</label>
-                    <textarea id="linkDescription" placeholder="Add a description for this link..." rows="3"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="linkCategory">Category</label>
-                    <input type="text" id="linkCategory" placeholder="e.g., Work, Personal, Learning">
-                </div>
-                
-                <button type="submit" class="btn btn-primary">
-                    <span id="submitText">Add Link</span>
-                </button>
-            </form>
-        </div>
 
-        <div class="search-section">
-            <div class="search-controls">
-                <input type="text" id="searchInput" placeholder="🔍 Search links by title, description, or URL...">
-                <select id="categoryFilter">
-                    <option value="">All Categories</option>
-                </select>
-                <select id="sortBy">
-                    <option value="newest">Newest First</option>
-                    <option value="oldest">Oldest First</option>
-                    <option value="title">Title (A-Z)</option>
-                </select>
+                <div class="stats">
+                    <span id="linkCount">0 links saved</span>
+                    <button id="exportBtn" class="btn-secondary">Export Links</button>
+                </div>
+
+                <div id="linksContainer" class="links-container">
+                    <div class="empty-state">
+                        <p>📭 No links saved yet. Start by adding your first link!</p>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="stats">
-            <span id="linkCount">0 links saved</span>
-            <button id="exportBtn" class="btn-secondary">Export Links</button>
-        </div>
-
-        <div id="linksContainer" class="links-container">
-            <div class="empty-state">
-                <p>📭 No links saved yet. Start by adding your first link above!</p>
+            <div class="right-section">
+                <div class="add-link-section">
+                    <h2>Add New Link</h2>
+                    <form id="linkForm">
+                        <div class="form-group">
+                            <label for="linkUrl">URL *</label>
+                            <input type="url" id="linkUrl" placeholder="https://example.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="linkTitle">Title *</label>
+                            <input type="text" id="linkTitle" placeholder="Enter link title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="linkDescription">Description</label>
+                            <textarea id="linkDescription" placeholder="Add a description for this link..." rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="linkCategory">Category</label>
+                            <input type="text" id="linkCategory" placeholder="e.g., Work, Personal, Learning">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <span id="submitText">Add Link</span>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

@@ -28,7 +28,7 @@ body {
 }
 
 .container {
-    max-width: 900px;
+    max-width: 1400px;
     margin: 0 auto;
 }
 
@@ -36,6 +36,24 @@ header {
     text-align: center;
     margin-bottom: 40px;
     padding: 30px 0;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 20px;
+    align-items: start;
+}
+
+.left-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.right-section {
+    position: sticky;
+    top: 20px;
 }
 
 header h1 {
@@ -54,7 +72,7 @@ header h1 {
     padding: 30px;
     border-radius: 12px;
     box-shadow: var(--shadow-lg);
-    margin-bottom: 30px;
+    height: fit-content;
 }
 
 .add-link-section h2 {
@@ -129,7 +147,10 @@ header h1 {
 }
 
 .search-section {
-    margin-bottom: 20px;
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
 }
 
 .search-controls {
@@ -303,6 +324,17 @@ header h1 {
 
 .visit-btn:hover {
     background: #059669;
+}
+
+@media (max-width: 1024px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .right-section {
+        position: static;
+        order: -1;
+    }
 }
 
 @media (max-width: 768px) {

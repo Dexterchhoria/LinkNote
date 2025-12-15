@@ -5,18 +5,18 @@
 }
 
 :root {
-    --primary-color: #4f46e5;
-    --primary-hover: #4338ca;
-    --secondary-color: #64748b;
-    --background: #f8fafc;
-    --card-bg: #ffffff;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --border-color: #e2e8f0;
-    --success: #10b981;
+    --primary-color: #00a884;
+    --primary-hover: #008f72;
+    --secondary-color: #8696a0;
+    --background: #0b141a;
+    --card-bg: #202c33;
+    --text-primary: #e9edef;
+    --text-secondary: #8696a0;
+    --border-color: #2a3942;
+    --success: #00a884;
     --danger: #ef4444;
-    --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
 body {
@@ -463,6 +463,40 @@ header h1 {
 .auth-message.error {
     background: #fee2e2;
     color: #991b1b;
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    color: var(--text-secondary);
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.divider span {
+    padding: 0 10px;
+    font-size: 0.9rem;
+}
+
+/* Google Button Styling */
+#googleLoginButton,
+#googleRegisterButton {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+#googleLoginButton > div,
+#googleRegisterButton > div {
+    width: 100% !important;
 }
 
 /* Header with user info */

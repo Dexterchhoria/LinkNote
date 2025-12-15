@@ -6,12 +6,30 @@ let links = [];
 let editingId = null;
 let authToken = localStorage.getItem('authToken');
 let currentUser = null;
+let GOOGLE_CLIENT_ID = null;
 
 // Initialize app
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadConfig();
     checkAuth();
     attachAuthListeners();
+    if (GOOGLE_CLIENT_ID) {
+        initializeGoogleSignIn();
+    }
 });
+
+// Load configuration from backend
+async function loadConfig() {
+    try {
+        const response = await fetch(`${API_URL}/config`);
+        if (response.ok) {
+            const data = await response.json();
+            GOOGLE_CLIENT_ID = data.googleClientId;
+        }
+    } catch (error) {
+        console.error('Failed to load config:', error);
+    }
+}
 
 // Check authentication
 function checkAuth() {
@@ -48,6 +66,11 @@ async function validateToken() {
 function showAuthModal() {
     document.getElementById('authModal').style.display = 'flex';
     document.getElementById('mainApp').style.display = 'none';
+    
+    // Initialize Google Sign-In when modal is shown
+    if (GOOGLE_CLIENT_ID) {
+        setTimeout(() => initializeGoogleSignIn(), 100);
+    }
 }
 
 // Show main app
@@ -57,6 +80,75 @@ function showMainApp() {
     document.getElementById('username').textContent = currentUser.username;
     loadLinks();
     attachEventListeners();
+}
+
+// Initialize Google Sign-In
+function initializeGoogleSignIn() {
+    if (typeof google !== 'undefined' && GOOGLE_CLIENT_ID) {
+        // Clear existing buttons
+        document.getElementById('googleLoginButton').innerHTML = '';
+        document.getElementById('googleRegisterButton').innerHTML = '';
+        
+        // Initialize for login
+        google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: handleGoogleSignIn
+        });
+        
+        // Render login button
+        google.accounts.id.renderButton(
+            document.getElementById('googleLoginButton'),
+            { 
+                theme: 'filled_black', 
+                size: 'large',
+                width: '100%',
+                text: 'signin_with',
+                shape: 'rectangular'
+            }
+        );
+        
+        // Render register button
+        google.accounts.id.renderButton(
+            document.getElementById('googleRegisterButton'),
+            { 
+                theme: 'filled_black', 
+                size: 'large',
+                width: '100%',
+                text: 'signup_with',
+                shape: 'rectangular'
+            }
+        );
+    } else if (!GOOGLE_CLIENT_ID) {
+        console.log('Google Client ID not loaded yet');
+    }
+}
+
+// Handle Google Sign-In
+async function handleGoogleSignIn(response) {
+    try {
+        const res = await fetch(`${API_URL}/auth/google`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ credential: response.credential })
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+            authToken = data.token;
+            currentUser = data.user;
+            localStorage.setItem('authToken', authToken);
+            showAuthMessage('Google sign-in successful!', 'success');
+            setTimeout(() => showMainApp(), 500);
+        } else {
+            showAuthMessage(data.message || 'Google sign-in failed', 'error');
+        }
+    } catch (error) {
+        console.error('Google sign-in error:', error);
+        showAuthMessage('Network error. Please try again.', 'error');
+    }
 }
 
 // Auth event listeners
@@ -71,6 +163,11 @@ function attachAuthListeners() {
             document.getElementById('loginForm').style.display = tabName === 'login' ? 'block' : 'none';
             document.getElementById('registerForm').style.display = tabName === 'register' ? 'block' : 'none';
             document.getElementById('authMessage').textContent = '';
+            
+            // Re-render Google buttons for the active tab
+            if (GOOGLE_CLIENT_ID) {
+                setTimeout(() => initializeGoogleSignIn(), 100);
+            }
         });
     });
     

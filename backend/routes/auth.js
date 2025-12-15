@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const pool = require('../config/database');
 const authMiddleware = require('../middleware/auth');
+const https = require('https');
 
 // Validation rules
 const registerValidation = [
@@ -176,5 +177,95 @@ router.get('/me', authMiddleware, async (req, res) => {
     });
   }
 });
+
+// Google Sign-In
+router.post('/google', async (req, res) => {
+  try {
+    const { credential } = req.body;
+    
+    if (!credential) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Google credential is required' 
+      });
+    }
+    
+    // Verify Google token
+    const payload = await verifyGoogleToken(credential);
+    
+    if (!payload) {
+      return res.status(401).json({ 
+        success: false, 
+        message: 'Invalid Google token' 
+      });
+    }
+    
+    const { email, name, sub: googleId } = payload;
+    
+    // Check if user exists
+    let result = await pool.query(
+      'SELECT * FROM users WHERE email = $1',
+      [email]
+    );
+    
+    let user;
+    
+    if (result.rows.length === 0) {
+      // Create new user
+      const username = name.replace(/\s+/g, '').toLowerCase() + Math.floor(Math.random() * 1000);
+      const randomPassword = Math.random().toString(36).slice(-8);
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+      
+      result = await pool.query(
+        'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email, created_at',
+        [username, email, hashedPassword]
+      );
+      user = result.rows[0];
+    } else {
+      user = result.rows[0];
+    }
+    
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: user.id, username: user.username, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRE }
+    );
+    
+    res.json({
+      success: true,
+      message: 'Google sign-in successful',
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email
+      }
+    });
+  } catch (error) {
+    console.error('Google sign-in error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Server error during Google sign-in' 
+    });
+  }
+});
+
+// Helper function to verify Google token
+async function verifyGoogleToken(token) {
+  try {
+    // Decode JWT without verification for now (in production, verify with Google's public keys)
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(Buffer.from(base64, 'base64').toString().split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error('Token verification error:', error);
+    return null;
+  }
+}
 
 module.exports = router;

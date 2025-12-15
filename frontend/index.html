@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LinkNote - Your Personal Link Manager</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <!-- Auth Modal -->
@@ -28,6 +29,12 @@
                     <input type="password" id="loginPassword" placeholder="Enter your password" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
+                
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+                
+                <div id="googleLoginButton"></div>
             </form>
             
             <form id="registerForm" class="auth-form" style="display: none;">
@@ -38,6 +45,12 @@
                 <div class="form-group">
                     <label for="registerEmail">Email</label>
                     <input type="email" id="registerEmail" placeholder="your@email.com" required>
+                
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+                
+                <div id="googleRegisterButton"></div>
                 </div>
                 <div class="form-group">
                     <label for="registerPassword">Password</label>

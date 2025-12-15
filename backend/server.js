@@ -13,6 +13,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/links', require('./routes/links'));
 
+// Config endpoint for frontend
+app.get('/api/config', (req, res) => {
+  res.json({ 
+    success: true,
+    googleClientId: process.env.GOOGLE_CLIENT_ID
+  });
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ 
